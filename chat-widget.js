@@ -18,7 +18,7 @@
 
   // Create iframe
   const iframe = document.createElement("iframe");
-  iframe.src = "https://yourdomain.com/chat?lang=auto"; // Change to your chat app URL
+  iframe.src = "https://test-widget-one.vercel.app/chat?lang=auto"; // Change to your chat app URL
   iframe.style = `
     position: fixed;
     bottom: 70px;
