@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Chat Widget</title>
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.19/auth0-spa-js.production.js"></script>
   <style>
     body {
       margin: 0;
@@ -88,20 +89,154 @@
     button:hover {
       background: #1565c0;
     }
+    #auth-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #ececec;
+    }
+    #auth-header .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    #auth-header .logo-icon {
+      width: 28px;
+      height: 28px;
+      background: #ff6600;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+    #auth-header .user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #auth-header .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #ff6600;
+      object-fit: cover;
+      background: #fff;
+    }
+    #auth-header .username {
+      font-weight: 500;
+      color: #222;
+      font-size: 1rem;
+      margin-right: 4px;
+    }
+    #auth-header button {
+      background: #181818;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 6px 16px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: background 0.2s;
+    }
+    #auth-header button:hover {
+      background: #ff6600;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
   <div id="chat">
+    <div id="auth-header">
+      <span class="logo">
+        <span class="logo-icon">🟠</span>
+        <span><span style="color:#181818;">Ai</span><span style="color:#ff6600;">Toim</span></span>
+      </span>
+      <span class="user-info" id="user-info">
+        <!-- User info or login button will be injected here -->
+      </span>
+    </div>
     <h2>Welcome to Chat!</h2>
     <div id="messages"></div>
     <div class="input-row">
-      <input type="text" id="input" placeholder="Type a message..." onkeydown="if(event.key==='Enter'){send();}" />
-      <button onclick="send()">Send</button>
+      <input type="text" id="input" placeholder="Type a message..." onkeydown="if(event.key==='Enter'){send();}" disabled />
+      <button onclick="send()" id="send-btn" disabled>Send</button>
     </div>
   </div>
 
   <script>
+    // Auth0 config
+    const auth0Domain = 'YOUR_AUTH0_DOMAIN';
+    const auth0ClientId = 'YOUR_AUTH0_CLIENT_ID';
+    let auth0Client = null;
+    let user = null;
+
+    async function configureAuth0() {
+      auth0Client = await createAuth0Client({
+        domain: auth0Domain,
+        client_id: auth0ClientId,
+        cacheLocation: 'localstorage'
+      });
+
+      // Handle redirect callback
+      if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+        await auth0Client.handleRedirectCallback();
+        window.history.replaceState({}, document.title, '/chat');
+      }
+
+      user = await auth0Client.getUser();
+      updateAuthUI();
+    }
+
+    function updateAuthUI() {
+      const userInfo = document.getElementById('user-info');
+      const input = document.getElementById('input');
+      const sendBtn = document.getElementById('send-btn');
+      if (user) {
+        userInfo.innerHTML = `
+          <span class="username">${user.name || user.email}</span>
+          <img class="avatar" src="${user.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || user.email)}" alt="avatar" />
+          <button onclick="logout()">Logout</button>
+        `;
+        input.disabled = false;
+        sendBtn.disabled = false;
+      } else {
+        userInfo.innerHTML = `
+          <button onclick="login()">Sign in with Auth0</button>
+        `;
+        input.disabled = true;
+        sendBtn.disabled = true;
+      }
+    }
+
+    async function login() {
+      await auth0Client.loginWithRedirect({
+        redirect_uri: window.location.origin + '/chat'
+      });
+    }
+
+    async function logout() {
+      await auth0Client.logout({
+        logoutParams: {
+          returnTo: window.location.origin + '/chat'
+        }
+      });
+      user = null;
+      updateAuthUI();
+    }
+
+    window.login = login;
+    window.logout = logout;
+
     function send() {
+      if (!user) return;
       const input = document.getElementById("input");
       const message = input.value.trim();
       if (!message) return;
@@ -122,6 +257,11 @@
         messages.scrollTop = messages.scrollHeight;
       }, 1000);
     }
+
+    window.send = send;
+
+    // Initialize Auth0 on page load
+    window.addEventListener('DOMContentLoaded', configureAuth0);
   </script>
 </body>
 </html>
