@@ -59,8 +59,8 @@
     position: fixed;
     bottom: 70px;
     right: 20px;
-    width: 380px;
-    height: 520px;
+    width: 450px;
+    height: 600px;
     border: none;
     border-radius: 16px;
     z-index: 9999;
