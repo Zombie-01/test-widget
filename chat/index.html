@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>Chat Widget</title>
-  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.19/auth0-spa-js.production.js"></script>
   <style>
     body {
       margin: 0;
@@ -23,6 +22,7 @@
       display: flex;
       flex-direction: column;
       min-height: 480px;
+      position: relative;
     }
     #chat h2 {
       margin: 0 0 12px 0;
@@ -150,6 +150,79 @@
       background: #ff6600;
       color: #fff;
     }
+    /* Login overlay styles */
+    #login-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.98);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border-radius: 12px;
+    }
+    #login-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    #login-logo .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: #ff6600;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    #login-logo .logo-text {
+      font-size: 1.6rem;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+    #login-logo .logo-text span {
+      color: #181818;
+    }
+    #login-logo .logo-text .orange {
+      color: #ff6600;
+    }
+    #login-overlay .desc {
+      margin: 0 0 18px 0;
+      font-size: 1.08rem;
+      color: #222;
+      text-align: center;
+      max-width: 270px;
+    }
+    #login-overlay .desc strong {
+      font-weight: bold;
+    }
+    #google-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px 28px;
+      font-size: 1.08rem;
+      font-weight: 500;
+      color: #222;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: border 0.2s;
+    }
+    #google-btn:hover {
+      border: 1.5px solid #ff6600;
+    }
+    #google-btn img {
+      width: 22px;
+      height: 22px;
+    }
   </style>
 </head>
 <body>
@@ -169,72 +242,55 @@
       <input type="text" id="input" placeholder="Type a message..." onkeydown="if(event.key==='Enter'){send();}" disabled />
       <button onclick="send()" id="send-btn" disabled>Send</button>
     </div>
+    <div id="login-overlay">
+      <div id="login-logo">
+        <span class="logo-icon">🟠</span>
+        <span class="logo-text"><span>i</span><span class="orange">Toim</span></span>
+      </div>
+      <div class="desc">
+        <strong>AiToim</strong> агентыг ашиглахын тулд та өөрийн бүртгэлээр нэвтрэх шаардлагатай.
+      </div>
+      <button id="google-btn" onclick="fakeLogin()">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" />
+        Sign in with Google
+      </button>
+    </div>
   </div>
 
   <script>
-    // Auth0 config
-    const auth0Domain = 'YOUR_AUTH0_DOMAIN';
-    const auth0ClientId = 'YOUR_AUTH0_CLIENT_ID';
-    let auth0Client = null;
+    // Simulate login state
     let user = null;
-
-    async function configureAuth0() {
-      auth0Client = await createAuth0Client({
-        domain: auth0Domain,
-        client_id: auth0ClientId,
-        cacheLocation: 'localstorage'
-      });
-
-      // Handle redirect callback
-      if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-        await auth0Client.handleRedirectCallback();
-        window.history.replaceState({}, document.title, '/chat');
-      }
-
-      user = await auth0Client.getUser();
+    function fakeLogin() {
+      user = {
+        name: "Bat-Erdene",
+        picture: "https://randomuser.me/api/portraits/men/32.jpg"
+      };
+      document.getElementById('login-overlay').style.display = 'none';
       updateAuthUI();
     }
-
+    function fakeLogout() {
+      user = null;
+      document.getElementById('login-overlay').style.display = 'flex';
+      updateAuthUI();
+    }
     function updateAuthUI() {
       const userInfo = document.getElementById('user-info');
       const input = document.getElementById('input');
       const sendBtn = document.getElementById('send-btn');
       if (user) {
         userInfo.innerHTML = `
-          <span class="username">${user.name || user.email}</span>
-          <img class="avatar" src="${user.picture || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || user.email)}" alt="avatar" />
-          <button onclick="logout()">Logout</button>
+          <span class="username">${user.name}</span>
+          <img class="avatar" src="${user.picture}" alt="avatar" />
+          <button onclick="fakeLogout()">Logout</button>
         `;
         input.disabled = false;
         sendBtn.disabled = false;
       } else {
-        userInfo.innerHTML = `
-          <button onclick="login()">Sign in with Auth0</button>
-        `;
+        userInfo.innerHTML = '';
         input.disabled = true;
         sendBtn.disabled = true;
       }
     }
-
-    async function login() {
-      await auth0Client.loginWithRedirect({
-        redirect_uri: window.location.origin + '/chat'
-      });
-    }
-
-    async function logout() {
-      await auth0Client.logout({
-        logoutParams: {
-          returnTo: window.location.origin + '/chat'
-        }
-      });
-      user = null;
-      updateAuthUI();
-    }
-
-    window.login = login;
-    window.logout = logout;
-
     function send() {
       if (!user) return;
       const input = document.getElementById("input");
@@ -257,11 +313,14 @@
         messages.scrollTop = messages.scrollHeight;
       }, 1000);
     }
-
     window.send = send;
-
-    // Initialize Auth0 on page load
-    window.addEventListener('DOMContentLoaded', configureAuth0);
+    window.fakeLogin = fakeLogin;
+    window.fakeLogout = fakeLogout;
+    // On load, show login overlay
+    window.addEventListener('DOMContentLoaded', () => {
+      updateAuthUI();
+      document.getElementById('login-overlay').style.display = user ? 'none' : 'flex';
+    });
   </script>
 </body>
 </html>
