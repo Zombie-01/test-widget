@@ -17,94 +17,38 @@
       background: #fff;
       border-radius: 12px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-      width: 350px;
-      padding: 24px 18px 18px 18px;
+      width: 410px;
+      padding: 0;
       display: flex;
       flex-direction: column;
-      min-height: 480px;
+      min-height: 540px;
       position: relative;
+      overflow: hidden;
     }
-    #chat h2 {
-      margin: 0 0 12px 0;
-      color: #3b3b3b;
-      font-size: 1.3rem;
-      text-align: center;
-    }
-    #messages {
-      flex: 1;
-      overflow-y: auto;
-      margin-bottom: 16px;
-      padding-right: 4px;
-      max-height: 320px;
-    }
-    #messages p {
-      margin: 8px 0;
-      padding: 8px 12px;
-      border-radius: 16px;
-      max-width: 80%;
-      word-break: break-word;
-      font-size: 1rem;
-      line-height: 1.4;
-    }
-    #messages p.user {
-      background: #e1f5fe;
-      align-self: flex-end;
-      color: #0277bd;
-      margin-left: auto;
-      text-align: right;
-    }
-    #messages p.bot {
-      background: #f1f8e9;
-      color: #558b2f;
-      align-self: flex-start;
-      margin-right: auto;
-      text-align: left;
-    }
-    .input-row {
-      display: flex;
-      gap: 8px;
-    }
-    #input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #cfd8dc;
-      border-radius: 20px;
-      font-size: 1rem;
-      outline: none;
-      transition: border 0.2s;
-    }
-    #input:focus {
-      border-color: #64b5f6;
-    }
-    button {
-      background: #1976d2;
-      color: #fff;
-      border: none;
-      border-radius: 20px;
-      padding: 0 18px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    button:hover {
-      background: #1565c0;
-    }
-    #auth-header {
+    /* Header styles */
+    #main-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #ececec;
+      background: #181c23;
+      padding: 12px 18px 10px 18px;
+      border-radius: 12px 12px 0 0;
+      position: relative;
     }
-    #auth-header .logo {
+    #main-header .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #main-header .logo {
       display: flex;
       align-items: center;
       gap: 8px;
       font-weight: bold;
       font-size: 1.2rem;
+      color: #fff;
     }
-    #auth-header .logo-icon {
+    #main-header .logo-icon {
       width: 28px;
       height: 28px;
       background: #ff6600;
@@ -116,39 +60,148 @@
       font-size: 1.1rem;
       font-weight: bold;
     }
-    #auth-header .user-info {
+    #main-header .title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-left: 4px;
+      letter-spacing: 0.1em;
+    }
+    #main-header .coke {
+      position: absolute;
+      right: 18px;
+      top: 10px;
+      font-family: 'Arial Black', Arial, sans-serif;
+      color: #e60012;
+      font-size: 1.1rem;
+      letter-spacing: 0.02em;
+      font-weight: bold;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
-    #auth-header .avatar {
-      width: 32px;
-      height: 32px;
+    #main-header .user-avatar {
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      border: 2px solid #ff6600;
+      border: 2px solid #fff;
       object-fit: cover;
       background: #fff;
+      margin-left: 16px;
     }
-    #auth-header .username {
-      font-weight: 500;
-      color: #222;
-      font-size: 1rem;
-      margin-right: 4px;
+    /* Credit bars */
+    #credits-bar {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 10px 18px 0 18px;
+      background: #181c23;
     }
-    #auth-header button {
-      background: #181818;
+    .credit-label {
       color: #fff;
-      border: none;
-      border-radius: 12px;
-      padding: 6px 16px;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-left: 8px;
-      transition: background 0.2s;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+      display: flex;
+      justify-content: space-between;
     }
-    #auth-header button:hover {
+    .credit-bar {
+      width: 120px;
+      height: 8px;
+      border-radius: 6px;
+      background: #e0e0e0;
+      margin-top: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+    .credit-bar-inner {
+      height: 100%;
+      border-radius: 6px;
+      position: absolute;
+      left: 0; top: 0;
+    }
+    .credit-bar.personal { background: #e0e0e0; }
+    .credit-bar-inner.personal { background: #ff6b6b; width: 60%; }
+    .credit-bar.total { background: #e0e0e0; }
+    .credit-bar-inner.total { background: #5c6bc0; width: 80%; }
+    .credit-value {
+      color: #fff;
+      font-size: 0.92rem;
+      margin-left: 6px;
+      font-weight: bold;
+    }
+    /* Info block */
+    #info-block {
+      background: #fff;
+      padding: 18px 18px 10px 18px;
+      border-radius: 0 0 0 0;
+      text-align: center;
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+    #info-block .logo-icon {
+      width: 38px;
+      height: 38px;
       background: #ff6600;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       color: #fff;
+      font-size: 1.7rem;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    #info-block .info-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #ff6600;
+      margin-bottom: 2px;
+      margin-top: 2px;
+    }
+    #info-block .info-desc {
+      color: #222;
+      font-size: 1.01rem;
+      margin-bottom: 8px;
+      margin-top: 2px;
+    }
+    #info-block .info-desc strong {
+      color: #181818;
+      font-weight: 600;
+    }
+    /* Question list */
+    #question-list {
+      flex: 1;
+      background: #f7f8fa;
+      padding: 0 18px 18px 18px;
+      overflow-y: auto;
+      border-radius: 0 0 12px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .question-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 1.07rem;
+      color: #222;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      transition: border 0.18s, background 0.18s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .question-item:hover {
+      border: 1.5px solid #ff6600;
+      background: #fff7f0;
+    }
+    .question-arrow {
+      color: #bdbdbd;
+      font-size: 1.25rem;
+      margin-top: 2px;
+      flex-shrink: 0;
     }
     /* Login overlay styles */
     #login-overlay {
@@ -227,21 +280,65 @@
 </head>
 <body>
   <div id="chat">
-    <div id="auth-header">
-      <span class="logo">
-        <span class="logo-icon">🟠</span>
-        <span><span style="color:#181818;">Ai</span><span style="color:#ff6600;">Toim</span></span>
-      </span>
-      <span class="user-info" id="user-info">
-        <!-- User info or login button will be injected here -->
-      </span>
+    <!-- Main header -->
+    <div id="main-header" style="display:none;">
+      <div class="left">
+        <span class="logo">
+          <span class="logo-icon">🟠</span>
+          <span class="title">Ask Voyager</span>
+        </span>
+      </div>
+      <div class="coke">
+        <span>МЭДЛЭГ САНХҮҮЖҮҮЛЭГЧ</span>
+        <span style="font-family:inherit;font-size:1.2rem;color:#e60012;">CocaCola</span>
+        <img class="user-avatar" id="user-avatar" src="" alt="avatar" style="margin-left:10px;">
+      </div>
     </div>
-    <h2>Welcome to Chat!</h2>
-    <div id="messages"></div>
-    <div class="input-row">
-      <input type="text" id="input" placeholder="Type a message..." onkeydown="if(event.key==='Enter'){send();}" disabled />
-      <button onclick="send()" id="send-btn" disabled>Send</button>
+    <!-- Credits bar -->
+    <div id="credits-bar" style="display:none;">
+      <div>
+        <div class="credit-label">
+          <span>Хувийн кредит</span>
+          <span class="credit-value" style="color:#ff6b6b;">32,897.7</span>
+        </div>
+        <div class="credit-bar personal">
+          <div class="credit-bar-inner personal"></div>
+        </div>
+      </div>
+      <div>
+        <div class="credit-label">
+          <span>Нийтийн кредит</span>
+          <span class="credit-value" style="color:#5c6bc0;">2,523,897.7</span>
+        </div>
+        <div class="credit-bar total">
+          <div class="credit-bar-inner total"></div>
+        </div>
+      </div>
     </div>
+    <!-- Info block -->
+    <div id="info-block" style="display:none;">
+      <div class="logo-icon">🟠</div>
+      <div class="info-title">iToim</div>
+      <div class="info-desc">
+        <strong>AiToim</strong> агент нь таны уншиж буй мэдээллийг илүү дэлгэрэнгүй ойлголт өгөхөд чиглэсэн хиймэл оюуны туслах юм.
+      </div>
+    </div>
+    <!-- Question list -->
+    <div id="question-list" style="display:none;">
+      <div class="question-item" onclick="selectQuestion(this)">
+        <span class="question-arrow">→</span>
+        <span>Монголын коксжих нүүрсний үнийн өсөлтөд ямар хүчин зүйлс нөлөөлж байгаа вэ?</span>
+      </div>
+      <div class="question-item" onclick="selectQuestion(this)">
+        <span class="question-arrow">→</span>
+        <span>Энэхүү үнийн өөрчлөлт Монголын эдийн засаг болон төсвийн орлогод хэрхэн нөлөөлж болох вэ?</span>
+      </div>
+      <div class="question-item" onclick="selectQuestion(this)">
+        <span class="question-arrow">→</span>
+        <span>Үг өсөлт урт хугацаанд тогтвортой байж чадах уу, эсвэл богино хугацаанд зах зээлийн хэлбэлзэл үү?</span>
+      </div>
+    </div>
+    <!-- Login overlay -->
     <div id="login-overlay">
       <div id="login-logo">
         <span class="logo-icon">🟠</span>
@@ -256,7 +353,6 @@
       </button>
     </div>
   </div>
-
   <script>
     // Simulate login state
     let user = null;
@@ -274,48 +370,26 @@
       updateAuthUI();
     }
     function updateAuthUI() {
-      const userInfo = document.getElementById('user-info');
-      const input = document.getElementById('input');
-      const sendBtn = document.getElementById('send-btn');
-      if (user) {
-        userInfo.innerHTML = `
-          <span class="username">${user.name}</span>
-          <img class="avatar" src="${user.picture}" alt="avatar" />
-          <button onclick="fakeLogout()">Logout</button>
-        `;
-        input.disabled = false;
-        sendBtn.disabled = false;
-      } else {
-        userInfo.innerHTML = '';
-        input.disabled = true;
-        sendBtn.disabled = true;
+      // Hide input and send button, show/hide main UI
+      const isLogged = !!user;
+      document.getElementById('main-header').style.display = isLogged ? 'flex' : 'none';
+      document.getElementById('credits-bar').style.display = isLogged ? 'flex' : 'none';
+      document.getElementById('info-block').style.display = isLogged ? 'block' : 'none';
+      document.getElementById('question-list').style.display = isLogged ? 'flex' : 'none';
+      // Set avatar
+      if (isLogged) {
+        document.getElementById('user-avatar').src = user.picture;
       }
     }
-    function send() {
-      if (!user) return;
-      const input = document.getElementById("input");
-      const message = input.value.trim();
-      if (!message) return;
-      const messages = document.getElementById("messages");
-      const p = document.createElement("p");
-      p.textContent = message;
-      p.className = "user";
-      messages.appendChild(p);
-      messages.scrollTop = messages.scrollHeight;
-      input.value = "";
-
-      // Simulate response
-      setTimeout(() => {
-        const reply = document.createElement("p");
-        reply.textContent = "Thanks for your message!";
-        reply.className = "bot";
-        messages.appendChild(reply);
-        messages.scrollTop = messages.scrollHeight;
-      }, 1000);
+    function selectQuestion(el) {
+      // Highlight selected question
+      document.querySelectorAll('.question-item').forEach(q => q.style.border = '1.5px solid transparent');
+      el.style.border = '1.5px solid #ff6600';
+      // You can add further logic here (e.g., show answer, etc.)
     }
-    window.send = send;
     window.fakeLogin = fakeLogin;
     window.fakeLogout = fakeLogout;
+    window.selectQuestion = selectQuestion;
     // On load, show login overlay
     window.addEventListener('DOMContentLoaded', () => {
       updateAuthUI();
