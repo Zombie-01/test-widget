@@ -3,165 +3,165 @@
 <head>
   <meta charset="UTF-8" />
   <title>Chat Widget</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f4f6fb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      @apply bg-[#f4f6fb] flex items-center justify-center min-h-screen m-0 font-sans;
     }
-    #chat {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-      width: 410px;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 540px;
-      position: relative;
-      overflow: hidden;
+  </style>
+</head>
+<body class="bg-[#f4f6fb] flex items-center justify-center min-h-screen m-0 font-sans">
+  <div id="chat" class="relative bg-white rounded-xl shadow-xl flex flex-col min-h-[600px] w-[450px] max-w-full h-[600px] transition-all duration-200">
+    <!-- Main header -->
+    <div id="main-header" class="flex items-center justify-between bg-[#181c23] px-5 py-3 rounded-t-xl relative">
+      <div class="flex items-center gap-3">
+        <span class="flex items-center gap-2 font-bold text-white text-lg">
+          <span class="w-7 h-7 bg-[#ff6600] rounded-full flex items-center justify-center text-white text-base font-bold">🟠</span>
+          <span class="ml-1 font-semibold tracking-wider">Ask Voyager</span>
+        </span>
+      </div>
+      <div class="absolute right-5 top-2 flex items-center gap-3 font-black text-[#e60012] text-base tracking-wide">
+        <span class="hidden sm:inline">МЭДЛЭГ САНХҮҮЖҮҮЛЭГЧ</span>
+        <span class="text-[#e60012] text-lg">CocaCola</span>
+        <img class="w-9 h-9 rounded-full border-2 border-white object-cover bg-white ml-3" id="user-avatar" src="" alt="avatar">
+      </div>
+    </div>
+    <!-- Credits bar -->
+    <div id="credits-bar" class="flex items-center gap-6 px-5 pt-2 bg-[#181c23]">
+      <div>
+        <div class="flex justify-between text-white text-sm mb-1">
+          <span>Хувийн кредит</span>
+          <span class="font-bold text-[#ff6b6b]">32,897.7</span>
+        </div>
+        <div class="w-28 h-2 rounded bg-gray-200 mt-1 relative overflow-hidden">
+          <div class="h-full rounded bg-[#ff6b6b] absolute left-0 top-0" style="width:60%"></div>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-between text-white text-sm mb-1">
+          <span>Нийтийн кредит</span>
+          <span class="font-bold text-[#5c6bc0]">2,523,897.7</span>
+        </div>
+        <div class="w-28 h-2 rounded bg-gray-200 mt-1 relative overflow-hidden">
+          <div class="h-full rounded bg-[#5c6bc0] absolute left-0 top-0" style="width:80%"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Info block -->
+    <div id="info-block" class="bg-white px-5 pt-5 pb-2 text-center">
+      <div class="w-10 h-10 bg-[#ff6600] rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-1">🟠</div>
+      <div class="text-xl font-bold text-[#ff6600] mb-1">iToim</div>
+      <div class="text-gray-800 text-base mb-2">
+        <strong class="text-[#181818] font-semibold">AiToim</strong> агент нь таны уншиж буй мэдээллийг илүү дэлгэрэнгүй ойлголт өгөхөд чиглэсэн хиймэл оюуны туслах юм.
+      </div>
+    </div>
+    <!-- Question list -->
+    <div id="question-list" class="flex-1 bg-[#f7f8fa] px-5 pb-5 flex flex-col gap-3 overflow-y-auto">
+      <button class="question-item flex items-start gap-3 bg-white rounded-lg px-4 py-3 text-base text-gray-900 cursor-pointer border-2 border-transparent hover:border-[#ff6600] hover:bg-[#fff7f0] transition"
+        onclick="selectQuestion(this)">
+        <span class="text-gray-300 text-xl mt-1">→</span>
+        <span>Монголын коксжих нүүрсний үнийн өсөлтөд ямар хүчин зүйлс нөлөөлж байгаа вэ?</span>
+      </button>
+      <button class="question-item flex items-start gap-3 bg-white rounded-lg px-4 py-3 text-base text-gray-900 cursor-pointer border-2 border-transparent hover:border-[#ff6600] hover:bg-[#fff7f0] transition"
+        onclick="selectQuestion(this)">
+        <span class="text-gray-300 text-xl mt-1">→</span>
+        <span>Энэхүү үнийн өөрчлөлт Монголын эдийн засаг болон төсвийн орлогод хэрхэн нөлөөлж болох вэ?</span>
+      </button>
+      <button class="question-item flex items-start gap-3 bg-white rounded-lg px-4 py-3 text-base text-gray-900 cursor-pointer border-2 border-transparent hover:border-[#ff6600] hover:bg-[#fff7f0] transition"
+        onclick="selectQuestion(this)">
+        <span class="text-gray-300 text-xl mt-1">→</span>
+        <span>Үг өсөлт урт хугацаанд тогтвортой байж чадах уу, эсвэл богино хугацаанд зах зээлийн хэлбэлзэл үү?</span>
+      </button>
+    </div>
+    <!-- Chat area (hidden by default) -->
+    <div id="chat-area" class="flex-1 flex flex-col bg-[#f7f8fa] px-5 pb-5 gap-2 overflow-y-auto hidden">
+      <div id="chat-messages" class="flex flex-col gap-2 mt-3"></div>
+    </div>
+    <!-- Login overlay -->
+    <div id="login-overlay" class="absolute inset-0 bg-white bg-opacity-95 flex flex-col items-center justify-center z-10 rounded-xl">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="w-9 h-9 bg-[#ff6600] rounded-full flex items-center justify-center text-white text-xl font-bold">🟠</span>
+        <span class="text-2xl font-bold tracking-wide"><span>i</span><span class="text-[#ff6600]">Toim</span></span>
+      </div>
+      <div class="text-gray-800 text-base text-center max-w-xs mb-4">
+        <strong class="font-bold">AiToim</strong> агентыг ашиглахын тулд та өөрийн бүртгэлээр нэвтрэх шаардлагатай.
+      </div>
+      <button id="google-btn" onclick="fakeLogin()" class="flex items-center gap-2 bg-white border-2 border-gray-200 rounded-lg px-7 py-2 text-base font-medium text-gray-800 shadow hover:border-[#ff6600] transition">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-6 h-6" />
+        Sign in with Google
+      </button>
+    </div>
+  </div>
+  <script>
+    // Simulate login state
+    let user = null;
+    function fakeLogin() {
+      user = {
+        name: "Bat-Erdene",
+        picture: "https://randomuser.me/api/portraits/men/32.jpg"
+      };
+      document.getElementById('login-overlay').style.display = 'none';
+      updateAuthUI();
     }
-    /* Header styles */
-    #main-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #181c23;
-      padding: 12px 18px 10px 18px;
-      border-radius: 12px 12px 0 0;
-      position: relative;
+    function fakeLogout() {
+      user = null;
+      document.getElementById('login-overlay').style.display = 'flex';
+      updateAuthUI();
     }
-    #main-header .left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    function updateAuthUI() {
+      // Set avatar
+      if (user) {
+        document.getElementById('user-avatar').src = user.picture;
+        document.getElementById('main-header').style.display = 'flex';
+        document.getElementById('credits-bar').style.display = 'flex';
+        document.getElementById('info-block').style.display = 'block';
+        document.getElementById('question-list').style.display = 'flex';
+        document.getElementById('chat-area').classList.add('hidden');
+      } else {
+        document.getElementById('main-header').style.display = 'flex';
+        document.getElementById('credits-bar').style.display = 'flex';
+        document.getElementById('info-block').style.display = 'block';
+        document.getElementById('question-list').style.display = 'flex';
+        document.getElementById('chat-area').classList.add('hidden');
+      }
     }
-    #main-header .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      color: #fff;
+    function selectQuestion(el) {
+      // Highlight selected question
+      document.querySelectorAll('.question-item').forEach(q => q.classList.remove('border-[#ff6600]'));
+      el.classList.add('border-[#ff6600]');
+      // Show chat area, hide info/question
+      document.getElementById('info-block').style.display = 'none';
+      document.getElementById('question-list').style.display = 'none';
+      document.getElementById('chat-area').classList.remove('hidden');
+      // Add user question and bot answer
+      const question = el.querySelector('span:last-child').textContent;
+      const chatMessages = document.getElementById('chat-messages');
+      chatMessages.innerHTML = `
+        <div class="flex justify-end">
+          <div class="bg-[#e1f5fe] text-[#0277bd] rounded-2xl px-4 py-2 max-w-[80%] text-right">${question}</div>
+        </div>
+      `;
+      setTimeout(() => {
+        chatMessages.innerHTML += `
+          <div class="flex justify-start">
+            <div class="bg-[#f1f8e9] text-[#558b2f] rounded-2xl px-4 py-2 max-w-[80%] text-left">Энэ бол таны асуултын хариу. (Жишээ хариу)</div>
+          </div>
+        `;
+        document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
+      }, 800);
     }
-    #main-header .logo-icon {
-      width: 28px;
-      height: 28px;
-      background: #ff6600;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: bold;
-    }
-    #main-header .title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #fff;
-      margin-left: 4px;
-      letter-spacing: 0.1em;
-    }
-    #main-header .coke {
-      position: absolute;
-      right: 18px;
-      top: 10px;
-      font-family: 'Arial Black', Arial, sans-serif;
-      color: #e60012;
-      font-size: 1.1rem;
-      letter-spacing: 0.02em;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    #main-header .user-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: 2px solid #fff;
-      object-fit: cover;
-      background: #fff;
-      margin-left: 16px;
-    }
-    /* Credit bars */
-    #credits-bar {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      padding: 10px 18px 0 18px;
-      background: #181c23;
-    }
-    .credit-label {
-      color: #fff;
-      font-size: 0.95rem;
-      margin-bottom: 2px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .credit-bar {
-      width: 120px;
-      height: 8px;
-      border-radius: 6px;
-      background: #e0e0e0;
-      margin-top: 2px;
-      position: relative;
-      overflow: hidden;
-    }
-    .credit-bar-inner {
-      height: 100%;
-      border-radius: 6px;
-      position: absolute;
-      left: 0; top: 0;
-    }
-    .credit-bar.personal { background: #e0e0e0; }
-    .credit-bar-inner.personal { background: #ff6b6b; width: 60%; }
-    .credit-bar.total { background: #e0e0e0; }
-    .credit-bar-inner.total { background: #5c6bc0; width: 80%; }
-    .credit-value {
-      color: #fff;
-      font-size: 0.92rem;
-      margin-left: 6px;
-      font-weight: bold;
-    }
-    /* Info block */
-    #info-block {
-      background: #fff;
-      padding: 18px 18px 10px 18px;
-      border-radius: 0 0 0 0;
-      text-align: center;
-      margin-bottom: 0;
-      margin-top: 0;
-    }
-    #info-block .logo-icon {
-      width: 38px;
-      height: 38px;
-      background: #ff6600;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 1.7rem;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-    #info-block .info-title {
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: #ff6600;
-      margin-bottom: 2px;
-      margin-top: 2px;
-    }
-    #info-block .info-desc {
-      color: #222;
-      font-size: 1.01rem;
-      margin-bottom: 8px;
+    window.fakeLogin = fakeLogin;
+    window.fakeLogout = fakeLogout;
+    window.selectQuestion = selectQuestion;
+    // On load, show login overlay
+    window.addEventListener('DOMContentLoaded', () => {
+      updateAuthUI();
+      document.getElementById('login-overlay').style.display = user ? 'none' : 'flex';
+    });
+  </script>
+</body>
+</html>
       margin-top: 2px;
     }
     #info-block .info-desc strong {
